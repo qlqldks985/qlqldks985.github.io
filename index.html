@@ -175,6 +175,50 @@
   .cert b{display:block;font-weight:700;font-size:15px}
   .cert small{color:var(--sub)}
 
+  /* 걸어온 길 (캐릭터 타임라인) */
+  .journey{margin-bottom:20px;padding:24px 0 18px}
+  .journey .jhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:0 28px;margin-bottom:6px}
+  .journey h3{margin:0}
+  .jlegend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--sub);align-items:center}
+  .jlegend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+  .jplay{border:none;background:var(--soft);color:var(--main);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer}
+  .jtrack{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--line) transparent;-webkit-overflow-scrolling:touch}
+  .jline{position:relative;height:232px}
+  .jbase,.jfill{position:absolute;top:122px;height:4px;border-radius:4px}
+  .jbase{background:var(--line)}
+  .jfill{background:linear-gradient(90deg,var(--main),var(--main2));width:0;transition-property:width;transition-timing-function:linear}
+  .jstop{position:absolute;top:114px;width:124px;transform:translateX(-50%);background:none;border:none;color:var(--text);cursor:pointer;text-align:center;padding:0;font-family:inherit}
+  .jstop .dot{display:block;width:20px;height:20px;margin:0 auto 8px;border-radius:50%;background:var(--card);border:4px solid var(--c);transition:.3s}
+  .jstop .d{display:block;font-size:13px;font-weight:700;color:var(--sub);transition:.3s}
+  .jstop .t{display:block;font-size:12px;line-height:1.4;color:var(--sub);opacity:.75;transition:.3s;word-break:keep-all}
+  .jstop.done .dot{background:var(--c)}
+  .jstop.done .d{color:var(--c)}
+  .jstop.now .dot{transform:scale(1.35);box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 22%,transparent)}
+  .jstop.now .t{opacity:1;color:var(--text);font-weight:500}
+  .jstop:focus-visible{outline:2px solid var(--main);outline-offset:4px;border-radius:8px}
+  .walker{position:absolute;left:0;top:50px;width:40px;height:62px;margin-left:-20px;transition-property:transform,opacity;transition-timing-function:linear;z-index:2;pointer-events:none}
+  .walker.gone{opacity:0;transition:opacity .5s}
+  .walker svg{width:40px;height:62px;overflow:visible;transition:transform .2s}
+  .walker svg.left{transform:scaleX(-1)}
+  .walker .limb{stroke:var(--text);stroke-width:3.2;stroke-linecap:round;fill:none}
+  .walker .lg,.walker .ar{transform-box:view-box}
+  .walker .lg{transform-origin:20px 38px}
+  .walker .ar{transform-origin:20px 24px}
+  .walker .lg.a,.walker .ar.b{transform:rotate(-16deg)}
+  .walker .lg.b,.walker .ar.a{transform:rotate(16deg)}
+  .walker.walking .lg.a,.walker.walking .ar.b{animation:jswing .42s ease-in-out infinite alternate}
+  .walker.walking .lg.b,.walker.walking .ar.a{animation:jswing .42s ease-in-out infinite alternate-reverse}
+  .walker.walking svg .bodyg{animation:jbob .21s ease-in-out infinite alternate}
+  @keyframes jswing{from{transform:rotate(-28deg)}to{transform:rotate(28deg)}}
+  @keyframes jbob{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+  .bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,6px);background:var(--text);color:var(--bg);font-size:13px;font-weight:500;padding:6px 12px;border-radius:12px;white-space:nowrap;opacity:0;transition:.3s}
+  .bubble::after{content:'';position:absolute;top:100%;left:50%;margin-left:-6px;border:6px solid transparent;border-top-color:var(--text)}
+  .bubble.show{opacity:1;transform:translate(-50%,0)}
+  @media (prefers-reduced-motion:reduce){
+    .walker,.jfill{transition:none!important}
+    .walker.walking *{animation:none!important}
+  }
+
   /* 스토리 */
   .story{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-radius:28px;padding:48px;display:grid;grid-template-columns:220px 1fr;gap:30px;position:relative;overflow:hidden}
   .story::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
@@ -321,6 +365,39 @@
 <section id="education">
   <div class="wrap">
     <div class="head reveal"><div><div class="kicker">EDUCATION</div><h2>학력 · 교육 · 자격증</h2></div></div>
+    <div class="box journey reveal" id="journey">
+      <div class="jhead">
+        <h3>🚶 걸어온 길</h3>
+        <div class="jlegend">
+          <span><i style="background:var(--main)"></i>학력 · 교육</span>
+          <span><i style="background:#10b981"></i>자격증</span>
+          <span><i style="background:#f59e0b"></i>일</span>
+          <button class="jplay" id="jplay" aria-label="애니메이션 멈춤">❚❚ 멈춤</button>
+        </div>
+      </div>
+      <div class="jtrack" id="jtrack">
+        <div class="jline" id="jline">
+          <div class="jbase" id="jbase"></div>
+          <div class="jfill" id="jfill"></div>
+          <div class="walker" id="walker" aria-hidden="true">
+            <div class="bubble" id="bubble"></div>
+            <svg viewBox="0 0 40 62">
+              <g class="bodyg">
+                <g class="lg a"><line class="limb" x1="20" y1="38" x2="20" y2="58"/></g>
+                <g class="lg b"><line class="limb" x1="20" y1="38" x2="20" y2="58"/></g>
+                <line class="limb" x1="20" y1="19" x2="20" y2="39"/>
+                <g class="ar a"><line class="limb" x1="20" y1="24" x2="20" y2="37"/></g>
+                <g class="ar b"><line class="limb" x1="20" y1="24" x2="20" y2="37"/></g>
+                <rect x="10" y="25" width="7" height="11" rx="2.5" fill="var(--main2)"/>
+                <circle cx="20" cy="10" r="8.5" fill="var(--card)" stroke="var(--text)" stroke-width="3"/>
+                <circle cx="23.5" cy="9" r="1.6" fill="var(--text)"/>
+                <path d="M11 7 Q20 -2 29 7" fill="none" stroke="var(--main)" stroke-width="4" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="two">
       <div class="box reveal">
         <h3>🎓 학력 · 교육</h3>
@@ -388,6 +465,24 @@ const PROFILE = {
     { name: 'ITQ 아래한글 · 한쇼 A등급', date: '2017.03 – 2017.12', icon: '💻' },
   ],
 };
+
+/* =========================================================
+   ✏️ 1-1. 걸어온 길 — 캐릭터가 이 순서대로 걸어가며 멈춰요 (오래된 것부터)
+   type: 'edu'(학력·교육) / 'cert'(자격증) / 'work'(일)
+   ========================================================= */
+const JOURNEY = [
+  { date: '2017.03', type: 'cert', icon: '💻', title: 'ITQ 한쇼 A등급' },
+  { date: '2017.12', type: 'cert', icon: '💻', title: 'ITQ 아래한글 A등급' },
+  { date: '2020.03', type: 'edu',  icon: '🎓', title: '우송정보대학 입학 (영상컨텐츠)' },
+  { date: '2020.06', type: 'cert', icon: '🎨', title: 'GTQ 2급' },
+  { date: '2020.12', type: 'work', icon: '📦', title: '우체국 물류 알바' },
+  { date: '2024.06', type: 'cert', icon: '🚜', title: '지게차운전기능사' },
+  { date: '2024.08', type: 'cert', icon: '🎨', title: 'GTQ 1급' },
+  { date: '2025.02', type: 'edu',  icon: '🎓', title: '우송정보대학 졸업' },
+  { date: '2026.01', type: 'cert', icon: '🚗', title: '1종 보통 운전면허' },
+  { date: '2026.04', type: 'edu',  icon: '🚁', title: 'DW아카데미 AIoT 과정 시작' },
+  { date: '2026.11', type: 'edu',  icon: '🚀', title: '과정 수료 · 백엔드 개발자로!' },
+];
 
 /* =========================================================
    ✏️ 2. 프로젝트 — 블록 하나 복사해서 추가하면 카드가 늘어나요
@@ -763,6 +858,98 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   io.unobserve(e.target);
 }), { threshold: .12 });
 $$('.reveal').forEach(el => io.observe(el));
+
+/* ===================== 걸어온 길: 캐릭터 이동 ===================== */
+(function journey(){
+  const COLOR = { edu: 'var(--main)', cert: '#10b981', work: '#f59e0b' };
+  const PAD = 90, PAUSE = 2000;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const line = $('#jline'), trackEl = $('#jtrack'), walker = $('#walker'), svg = walker.querySelector('svg');
+  const bubble = $('#bubble'), fill = $('#jfill'), base = $('#jbase'), playBtn = $('#jplay');
+  const mo = d => { const [y, m] = d.split('.').map(Number); return y * 12 + m; };
+
+  // 기간이 길수록 간격을 넓게 (너무 붙거나 멀어지지 않게 제한)
+  const xs = [];
+  JOURNEY.forEach((s, i) => xs.push(i === 0 ? PAD : xs[i - 1] + Math.min(260, 130 + (mo(s.date) - mo(JOURNEY[i - 1].date)) * 3)));
+  const startX = xs[0] - 60, last = JOURNEY.length - 1;
+  line.style.width = (xs[last] + PAD + 60) + 'px';
+  base.style.left = fill.style.left = xs[0] + 'px';
+  base.style.width = (xs[last] - xs[0]) + 'px';
+
+  line.insertAdjacentHTML('beforeend', JOURNEY.map((s, i) => `
+    <button class="jstop" style="left:${xs[i]}px;--c:${COLOR[s.type]}" data-k="${i}" aria-label="${s.date} ${s.title}">
+      <span class="dot"></span><span class="d">${s.date}</span><span class="t">${s.title}</span>
+    </button>`).join(''));
+  const stops = $$('.jstop');
+
+  let at = -1, x = startX, playing = !reduce, tmo = null, started = false;
+  function place(nx, dur){
+    walker.style.transitionDuration = dur + 'ms';
+    walker.style.transform = `translateX(${nx}px)`;
+    x = nx;
+  }
+  function walkTo(i){
+    clearTimeout(tmo);
+    x = new DOMMatrix(getComputedStyle(walker).transform).m41; // 걷는 중이면 지금 위치에서 출발
+    const dist = Math.abs(xs[i] - x);
+    const dur = reduce ? 0 : Math.min(2800, 300 + dist * 6);
+    svg.classList.toggle('left', xs[i] < x);
+    walker.classList.toggle('walking', dur > 0);
+    bubble.classList.remove('show');
+    stops.forEach(s => s.classList.remove('now'));
+    fill.style.transitionDuration = dur + 'ms';
+    fill.style.width = Math.max(0, xs[i] - xs[0]) + 'px';
+    trackEl.scrollTo({ left: xs[i] - trackEl.clientWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
+    place(xs[i], dur);
+    tmo = setTimeout(() => arrive(i), dur);
+  }
+  function arrive(i){
+    at = i;
+    walker.classList.remove('walking');
+    svg.classList.remove('left');
+    stops.forEach((s, k) => { s.classList.toggle('done', k <= i); s.classList.toggle('now', k === i); });
+    bubble.textContent = `${JOURNEY[i].icon} ${JOURNEY[i].title}`;
+    bubble.classList.add('show');
+    if (playing) tmo = setTimeout(next, i === last ? PAUSE * 1.8 : PAUSE);
+  }
+  function next(){
+    if (at < last) return walkTo(at + 1);
+    // 끝까지 가면 사라졌다가 처음부터 다시
+    bubble.classList.remove('show');
+    walker.classList.add('gone');
+    tmo = setTimeout(() => {
+      place(startX, 0);
+      fill.style.transitionDuration = '0ms'; fill.style.width = '0';
+      stops.forEach(s => s.classList.remove('done', 'now'));
+      at = -1;
+      walker.offsetWidth; // 위치 바꾼 걸 먼저 적용
+      walker.classList.remove('gone');
+      tmo = setTimeout(() => walkTo(0), 400);
+    }, 550);
+  }
+  function setPlaying(p){
+    playing = p;
+    playBtn.textContent = p ? '❚❚ 멈춤' : '▶ 재생';
+    playBtn.setAttribute('aria-label', p ? '애니메이션 멈춤' : '애니메이션 재생');
+    if (p && !walker.classList.contains('walking')) { clearTimeout(tmo); next(); }
+    if (!p && !walker.classList.contains('walking')) clearTimeout(tmo);
+  }
+  playBtn.onclick = () => setPlaying(!playing);
+  // 점을 누르면 그 시점으로 걸어감 (자동 재생은 멈춤)
+  line.addEventListener('click', e => {
+    const b = e.target.closest('.jstop'); if (!b) return;
+    if (playing) setPlaying(false);
+    walkTo(+b.dataset.k);
+  });
+
+  place(startX, 0);
+  // 화면에 보이면 출발
+  new IntersectionObserver((es, ob) => {
+    if (!es[0].isIntersecting || started) return;
+    started = true; ob.disconnect();
+    if (reduce) { setPlaying(false); walkTo(last); } else setTimeout(() => walkTo(0), 500);
+  }, { threshold: .35 }).observe($('#journey'));
+})();
 
 render();
 </script>
