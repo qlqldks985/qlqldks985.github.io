@@ -458,6 +458,35 @@ const PROJECTS = [
     },
   },
   {
+    type: 'solo', emoji: '🦊', bg: 'linear-gradient(135deg,#fde68a,#fdba74)',
+    label: '개인', wip: false,
+    title: '여우의 고난길<br>고난도 플랫포머 게임',
+    meta: '개인 프로젝트 · 브라우저에서 바로 플레이',
+    points: ['10개 스테이지 · 스테이지마다 다른 보스', '쉬움 / 어려움 두 가지 난이도', 'Supabase 로그인 · 온라인 랭킹'],
+    tags: ['JavaScript', 'Canvas', 'Supabase'],
+    detail: {
+      period: '2026.11', members: '1명', role: '기획 · 개발 전체',
+      summary: 'HTML5 Canvas와 순수 JavaScript로 만든 고난도 횡스크롤 플랫포머 게임입니다. 숨겨진 함정을 피하고 스테이지마다 다른 보스를 쓰러뜨리며 10개 스테이지를 지나 집까지 돌아가는 게임으로, 설치 없이 브라우저에서 바로 실행됩니다.',
+      work: [
+        '2단 점프, 여우불 공격, 스테이지별 기믹(어둠, 돌풍, 얼음 관성, 용암 등) 구현',
+        '보스 10종을 상태 기계로 설계하고, 모든 공격을 가로 방향으로 통일해 높이로 피하는 패턴 구성',
+        '쉬움 모드(하트 3개, 함정 경고, 안전한 땅 복귀)와 어려움 전용 함정 추가',
+        'Supabase로 회원가입·로그인과 온라인 랭킹 구현 (RLS로 다른 사람 기록 수정 차단)',
+        'Node 테스트 하네스와 보스 공략 봇으로 클리어 가능 여부를 자동 검증, GitHub Actions CI 구성',
+      ],
+      learned: [
+        '하나의 큰 파일을 역할별 파일로 나누니 기능을 추가하고 고치기가 훨씬 쉬워졌습니다.',
+        '사람이 직접 다 해 보기 어려운 부분은 테스트 봇으로 자동 검증하는 방법을 익혔습니다.',
+        '플레이 피드백을 받아 난이도와 패턴을 계속 다듬으며 사용자 입장에서 생각하는 법을 배웠습니다.',
+      ],
+      stack: ['JavaScript', 'HTML5 Canvas', 'Web Audio', 'Supabase', 'GitHub Pages', 'GitHub Actions'],
+      links: [
+        { text: '바로 플레이', url: 'https://qlqldks985.github.io/fox-hardcore/' },
+        { text: 'GitHub 저장소', url: 'https://github.com/qlqldks985/fox-hardcore' },
+      ],
+    },
+  },
+  {
     type: 'solo', emoji: '🌐', bg: 'linear-gradient(135deg,#bbf7d0,#bae6fd)',
     label: '개인', wip: false,
     title: '개인 포트폴리오<br>홈페이지',
