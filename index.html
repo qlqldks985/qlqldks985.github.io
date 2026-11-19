@@ -437,8 +437,8 @@
 <section id="contact">
   <div class="wrap">
     <div class="contact reveal">
-      <h2>함께 일하고 싶다면 연락 주세요 🙌</h2>
-      <p>새로운 기회와 협업 제안을 기다리고 있습니다.</p>
+      <h2>끝까지 봐 주셔서 감사합니다 🙌</h2>
+      <p>궁금한 점이나 면접 제안이 있으시면 언제든 편하게 연락 주세요. 빠르게 답장드리겠습니다.</p>
       <div class="row">
         <a data-bind-href="github" href="#">GitHub 보기</a>
         <button id="copyEmail">✉ <span data-bind="email">qlqldks985@gmail.com</span> 복사</button>
@@ -778,8 +778,15 @@ addEventListener('keydown', e => {
 // 자동 넘김 (마우스 올리면 잠시 멈춤)
 let hover = false;
 const carouselEl = $('.carousel');
-carouselEl.addEventListener('mouseenter', () => hover = true);
-carouselEl.addEventListener('mouseleave', () => { hover = false; restartAuto(); });
+// 스크롤하다 캐러셀이 커서 밑으로 들어온 건 '올림'으로 치지 않음 (실제로 마우스를 움직였을 때만 멈춤)
+let msx = null, msy = null;
+addEventListener('mousemove', e => {
+  const moved = e.screenX !== msx || e.screenY !== msy;
+  msx = e.screenX; msy = e.screenY;
+  if (moved) hover = carouselEl.contains(e.target);
+}, { passive: true });
+addEventListener('scroll', () => { hover = false; }, { passive: true });
+carouselEl.addEventListener('mouseleave', () => { hover = false; });
 track.addEventListener('touchstart', () => { hover = true; }, { passive: true });
 track.addEventListener('touchend', () => { setTimeout(() => { hover = false; restartAuto(); }, 3000); });
 function restartAuto(){ t0 = performance.now(); }
